@@ -1,9 +1,9 @@
 import { ReactComponent as CartIcon } from '../../../assets/icons/cart-icon.svg';
 import './header-cart-button.css';
 
-const HeaderCartButton = ({ children }) => {
+const HeaderCartButton = ({ showCart, children }) => {
   return (
-    <button className='button'>
+    <button className='button' onClick={showCart}>
       <span className='icon'>
         <CartIcon />
       </span>
