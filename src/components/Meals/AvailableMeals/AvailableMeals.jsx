@@ -1,5 +1,5 @@
 import { Card } from '../../shared';
-import MealItem from '../MealItem/MealtItems';
+import MealItem from '../MealItem/MealItems';
 
 import './available-meals.css';
 
@@ -39,6 +39,7 @@ const AvailableMeals = () => {
             return (
               <MealItem
                 key={meal.id}
+                id={meal.id}
                 name={meal.name}
                 description={meal.description}
                 price={meal.price}

@@ -1,8 +1,9 @@
 import { formatPriceInDollars } from '../../../utils/formatter.util';
+import MealItemForm from '../MealItemForm/MealItemForm';
 
 import './meal-item.css';
 
-const MealItem = ({ name, description, price }) => {
+const MealItem = ({ id, name, description, price }) => {
   return (
     <li className='meal'>
       <div>
@@ -10,7 +11,9 @@ const MealItem = ({ name, description, price }) => {
         <div className='description'>{description}</div>
         <div className='price'>{formatPriceInDollars.format(price)}</div>
       </div>
-      <div></div>
+      <div>
+        <MealItemForm id={id} />
+      </div>
     </li>
   );
 };
