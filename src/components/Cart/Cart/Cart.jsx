@@ -6,14 +6,18 @@ import './cart.css';
 import CartItem from '../CartItem/CartItem';
 
 const Cart = ({ closeCart }) => {
-  const { items, totalAmount } = useContext(CartContext);
+  const { items, totalAmount, addItem, removeItem } = useContext(CartContext);
 
   const formattedTotalAmount = formatPriceInDollars.format(totalAmount);
   const hasItems = items.length > 0;
 
-  const onRemoveItemHandler = (id) => {};
+  const onRemoveItemHandler = (id) => {
+    removeItem(id);
+  };
 
-  const onAddItemHandler = (item) => {};
+  const onAddItemHandler = (item) => {
+    addItem(item);
+  };
 
   return (
     <Modal closeModal={closeCart}>
@@ -25,8 +29,8 @@ const Cart = ({ closeCart }) => {
               name={item.name}
               price={item.price}
               amount={item.amount}
-              onAdd={onAddItemHandler}
-              onRemove={onRemoveItemHandler}
+              onAdd={onAddItemHandler.bind(null, item)}
+              onRemove={onRemoveItemHandler.bind(null, item.id)}
             />
           );
         })}
