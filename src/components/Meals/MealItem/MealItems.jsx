@@ -1,9 +1,16 @@
+import { useContext } from 'react';
 import { formatPriceInDollars } from '../../../utils/formatter.util';
 import MealItemForm from '../MealItemForm/MealItemForm';
-
+import CartContext from '../../../store/cart-context';
 import './meal-item.css';
 
 const MealItem = ({ id, name, description, price }) => {
+  const cartContext = useContext(CartContext);
+
+  const onAddToCart = (amount) => {
+    cartContext.addItem({ id, name, description, price, amount });
+  };
+
   return (
     <li className='meal'>
       <div>
@@ -12,7 +19,7 @@ const MealItem = ({ id, name, description, price }) => {
         <div className='price'>{formatPriceInDollars.format(price)}</div>
       </div>
       <div>
-        <MealItemForm id={id} />
+        <MealItemForm id={id} onAddToCart={onAddToCart} />
       </div>
     </li>
   );
