@@ -1,7 +1,7 @@
 import '../modal.css';
 
-const Backdrop = () => {
-  return <div className='backdrop'></div>;
+const Backdrop = ({ closeModal }) => {
+  return <div className='backdrop' onClick={closeModal}></div>;
 };
 
 export default Backdrop;

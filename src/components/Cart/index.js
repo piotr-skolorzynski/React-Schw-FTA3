@@ -1,3 +1,4 @@
 import Cart from "./Cart/Cart";
+import CartItem from "./CartItem/CartItem";
 
-export { Cart };
+export { Cart, CartItem };

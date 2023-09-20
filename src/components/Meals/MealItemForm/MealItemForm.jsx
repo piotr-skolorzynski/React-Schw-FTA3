@@ -9,7 +9,6 @@ const MealItemForm = ({ id, onAddToCart }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const enteredAmount = amountInputRef.current.value;
-    console.log(enteredAmount);
     const enteredAmountNumber = Number(enteredAmount);
 
     if (!enteredAmount || enteredAmountNumber < 1 || enteredAmountNumber > 5) {
