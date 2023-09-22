@@ -41,7 +41,6 @@ const cartReducer = (state, action) => {
     );
 
     const existingCartItem = state.items[existingCartItemIndex];
-    console.log(existingCartItem);
 
     const updatedTotalAmount = state.totalAmount - existingCartItem.price;
 
