@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Card } from '../../shared';
+import { Card, LoadingSpinner } from '../../shared';
 import MealItem from '../MealItem/MealItems';
 
 import './available-meals.css';
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchMeals = async () => {
+    setIsLoading(true);
     const response = await fetch(
       'https://order-food-app-schwarzmuller-default-rtdb.europe-west1.firebasedatabase.app/meals.json'
     );
@@ -23,6 +25,7 @@ const AvailableMeals = () => {
         description: data[key].description,
       });
     }
+    setIsLoading(false);
 
     setMeals(loadedMeals);
   };
@@ -36,17 +39,20 @@ const AvailableMeals = () => {
       {meals.length && (
         <Card>
           <ul>
-            {meals.map((meal) => {
-              return (
-                <MealItem
-                  key={meal.id}
-                  id={meal.id}
-                  name={meal.name}
-                  description={meal.description}
-                  price={meal.price}
-                />
-              );
-            })}
+            {isLoading && <LoadingSpinner />}
+            {!isLoading &&
+              meals.length &&
+              meals.map((meal) => {
+                return (
+                  <MealItem
+                    key={meal.id}
+                    id={meal.id}
+                    name={meal.name}
+                    description={meal.description}
+                    price={meal.price}
+                  />
+                );
+              })}
           </ul>
         </Card>
       )}
