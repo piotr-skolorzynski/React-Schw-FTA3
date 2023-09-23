@@ -1,12 +1,18 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Modal } from '../../shared';
 import CartContext from '../../../store/cart-context';
 import { formatPriceInDollars } from '../../../utils/formatter.util';
 import './cart.css';
+import CheckoutForm from '../CheckoutForm/CheckoutForm';
 import CartItem from '../CartItem/CartItem';
 
 const Cart = ({ closeCart }) => {
   const { items, totalAmount, addItem, removeItem } = useContext(CartContext);
+  const [isCheckoutFormOpen, setIsCheckoutFormOpen] = useState(false);
+
+  const onOrderHandler = () => {
+    setIsCheckoutFormOpen(true);
+  };
 
   const formattedTotalAmount = formatPriceInDollars.format(totalAmount);
   const hasItems = items.length > 0;
@@ -35,16 +41,26 @@ const Cart = ({ closeCart }) => {
           );
         })}
       </ul>
+
       <div className='total'>
         <span>Total Amount</span>
         <span>{formattedTotalAmount}</span>
       </div>
-      <div className='actions'>
-        <button className='button--alt' onClick={closeCart}>
-          Close
-        </button>
-        {hasItems && <button className='button'>Order</button>}
-      </div>
+
+      {isCheckoutFormOpen && <CheckoutForm onCancel={closeCart} />}
+
+      {!isCheckoutFormOpen && (
+        <div className='actions'>
+          <button className='button--alt' onClick={closeCart}>
+            Close
+          </button>
+          {hasItems && (
+            <button className='button' onClick={onOrderHandler}>
+              Order
+            </button>
+          )}
+        </div>
+      )}
     </Modal>
   );
 };
