@@ -4,7 +4,7 @@ import './checkout-form.css';
 const isEmpty = (value) => value.trim() === '';
 const isNotFiveChars = (value) => value.trim().length !== 5;
 
-const CheckoutForm = ({ onCancel }) => {
+const CheckoutForm = ({ onCancel, onConfirm }) => {
   const [formInputsValidity, setFormsInputsValidity] = useState({
     name: true,
     street: true,
@@ -45,6 +45,13 @@ const CheckoutForm = ({ onCancel }) => {
     if (!isFormValid) {
       return;
     }
+
+    onConfirm({
+      name: enteredUsername,
+      street: enteredCity,
+      postalCode: enteredPostalCode,
+      city: enteredCity,
+    });
   };
   return (
     <form className='checkout-form' onSubmit={confirmHandler}>

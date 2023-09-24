@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Modal } from '../../shared';
+import { LoadingSpinner, Modal } from '../../shared';
 import CartContext from '../../../store/cart-context';
 import { formatPriceInDollars } from '../../../utils/formatter.util';
 import './cart.css';
@@ -7,8 +7,11 @@ import CheckoutForm from '../CheckoutForm/CheckoutForm';
 import CartItem from '../CartItem/CartItem';
 
 const Cart = ({ closeCart }) => {
-  const { items, totalAmount, addItem, removeItem } = useContext(CartContext);
+  const { items, totalAmount, addItem, removeItem, clearCart } =
+    useContext(CartContext);
   const [isCheckoutFormOpen, setIsCheckoutFormOpen] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
 
   const onOrderHandler = () => {
     setIsCheckoutFormOpen(true);
@@ -25,8 +28,27 @@ const Cart = ({ closeCart }) => {
     addItem(item);
   };
 
-  return (
-    <Modal closeModal={closeCart}>
+  const onSubmitHandler = async (userData) => {
+    setIsPending(true);
+    try {
+      await fetch(
+        'https://order-food-app-schwarzmuller-default-rtdb.europe-west1.firebasedatabase.app/orders.json',
+        {
+          method: 'POST',
+          body: JSON.stringify({ user: userData, orderedItems: items }),
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsPending(false);
+      setDidSubmit(true);
+      clearCart();
+    }
+  };
+
+  const cartModalContent = (
+    <>
       <ul className='cart-items'>
         {items.map((item) => {
           return (
@@ -47,7 +69,9 @@ const Cart = ({ closeCart }) => {
         <span>{formattedTotalAmount}</span>
       </div>
 
-      {isCheckoutFormOpen && <CheckoutForm onCancel={closeCart} />}
+      {isCheckoutFormOpen && (
+        <CheckoutForm onConfirm={onSubmitHandler} onCancel={closeCart} />
+      )}
 
       {!isCheckoutFormOpen && (
         <div className='actions'>
@@ -61,6 +85,25 @@ const Cart = ({ closeCart }) => {
           )}
         </div>
       )}
+    </>
+  );
+
+  const didSubmitModalContent = (
+    <>
+      <p>Successfully sent the order!</p>{' '}
+      <div className='actions'>
+        <button className='button--alt' onClick={closeCart}>
+          Close
+        </button>
+      </div>
+    </>
+  );
+
+  return (
+    <Modal closeModal={closeCart}>
+      {isPending && <LoadingSpinner />}
+      {!isPending && !didSubmit && cartModalContent}
+      {!isPending && didSubmit && didSubmitModalContent}
     </Modal>
   );
 };
